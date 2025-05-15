@@ -24,12 +24,9 @@ phases:
       - dotnet test --configuration Release --no-build  # Run tests (if applicable)
       - echo "Tests completed successfully."
       - echo "Publishing the project..."
-      - dotnet publish ./SqsLamda/src/SqsLamda/SqsLamda.csproj \--configuration Release --output ./bin --runtime linux-x64 /p:PublishReadyToRun=true  # Publish the project to the bin directory
+      - dotnet publish ./SqsLamda/src/SqsLamda/SqsLamda.csproj --configuration Release --output ./bin --runtime linux-x64 /p:PublishReadyToRun=true  # Publish the project to the bin directory
       - echo "Packaging the build artifacts..."
-      - sam package \
-          --template ./SqsLamda/template.yaml \
-          --output-template-file packaged.yaml \
-          --s3-bucket s3-awsdevassociate-codepipeline-ss
+      - sam package --template ./SqsLamda/template.yaml --output-template-file packaged.yaml --s3-bucket s3-awsdevassociate-codepipeline-ss
 
 artifacts:
   files:
