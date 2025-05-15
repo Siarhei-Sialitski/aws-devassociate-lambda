@@ -1,0 +1,39 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      dotnet: 8.0  # Specify .NET 8 runtime
+    commands:
+      - echo "Installing dependencies..."
+      - dotnet --version  # Verify the .NET SDK version
+      - echo "Installing AWS SAM CLI..."
+      - pip install --upgrade aws-sam-cli  # Ensures SAM CLI is installed
+  pre_build:
+    commands:
+      - echo "Restoring dependencies..."
+      - dotnet restore  # Restores NuGet dependencies for the project/solution
+  build:
+    commands:
+      - echo "Building the .NET 8 project..."
+      - dotnet build --configuration Release  # Builds the project in Release configuration
+  post_build:
+    commands:
+      - echo "Build completed successfully."
+      - echo "Running tests (if applicable)..."
+      - dotnet test --configuration Release --no-build  # Run tests (if applicable)
+      - echo "Tests completed successfully."
+      - echo "Publishing the project..."
+      - dotnet publish ./SqsLambda/src/SqsLambda/SqsLambda.csproj --configuration Release --output ./bin  # Publish the project to the bin directory
+  package:
+    commands:
+      - echo "Packaging the build artifacts..."
+      - sam package \
+          --template-file ./SqsLambda/template.yaml \
+          --output-template-file packaged.yaml \
+          --s3-bucket $S3_BUCKET_NAME
+artifacts:
+  files:
+    - '**/bin/**'  # Include all output files generated during the build process
+  discard-paths: no  # Keep file paths as they are within the project structure
+  base-directory: ''  # Adjust based on the folder structure of your project
