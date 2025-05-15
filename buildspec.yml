@@ -25,13 +25,12 @@ phases:
       - echo "Tests completed successfully."
       - echo "Publishing the project..."
       - dotnet publish ./SqsLambda/src/SqsLambda/SqsLambda.csproj --configuration Release --output ./bin  # Publish the project to the bin directory
-  package:
-    commands:
       - echo "Packaging the build artifacts..."
       - sam package \
           --template-file ./SqsLambda/template.yaml \
           --output-template-file packaged.yaml \
-          --s3-bucket $S3_BUCKET_NAME
+          --s3-bucket s3-awsdevassociate-codepipeline-ss
+
 artifacts:
   files:
     - '**/bin/**'  # Include all output files generated during the build process
