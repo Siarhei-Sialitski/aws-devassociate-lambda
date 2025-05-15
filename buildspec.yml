@@ -6,14 +6,13 @@ phases:
       dotnet: 8.0  # Specify .NET 8 runtime
     commands:
       - echo "Installing dependencies..."
-      - curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --channel 8.0 
       - dotnet --version  # Verify the .NET SDK version
       - echo "Installing AWS SAM CLI..."
       - pip install --upgrade aws-sam-cli  # Ensures SAM CLI is installed
   pre_build:
     commands:
       - echo "Restoring dependencies..."
-      - dotnet restore  # Restores NuGet dependencies for the project/solution
+      - dotnet restore --runtime linux-x64 /p:PublishReadyToRun=true  # Restores NuGet dependencies for the project/solution
   build:
     commands:
       - echo "Building the .NET 8 project..."
@@ -25,7 +24,7 @@ phases:
       - dotnet test --configuration Release --no-build  # Run tests (if applicable)
       - echo "Tests completed successfully."
       - echo "Publishing the project..."
-      - dotnet publish ./SqsLamda/src/SqsLamda/SqsLamda.csproj --configuration Release --output ./bin  # Publish the project to the bin directory
+      - dotnet publish ./SqsLamda/src/SqsLamda/SqsLamda.csproj --configuration Release --output ./bin --runtime linux-x64 -c Release /p:PublishReadyToRun=true  # Publish the project to the bin directory
       - echo "Packaging the build artifacts..."
       - sam package \
           --template-file ./SqsLamda/template.yaml \
