@@ -24,10 +24,10 @@ phases:
       - dotnet test --configuration Release --no-build  # Run tests (if applicable)
       - echo "Tests completed successfully."
       - echo "Publishing the project..."
-      - dotnet publish ./SqsLambda/src/SqsLambda/SqsLamda.csproj --configuration Release --output ./bin  # Publish the project to the bin directory
+      - dotnet publish ./SqsLamda/src/SqsLamda/SqsLamda.csproj --configuration Release --output ./bin  # Publish the project to the bin directory
       - echo "Packaging the build artifacts..."
       - sam package \
-          --template-file ./SqsLambda/template.yaml \
+          --template-file ./SqsLamda/template.yaml \
           --output-template-file packaged.yaml \
           --s3-bucket s3-awsdevassociate-codepipeline-ss
 
