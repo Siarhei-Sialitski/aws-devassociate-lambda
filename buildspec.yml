@@ -26,9 +26,8 @@ phases:
       - echo "Publishing the project..."
       - dotnet publish ./SqsLamda/src/SqsLamda/SqsLamda.csproj --configuration Release --output ./publish --runtime linux-x64 --self-contained false /p:PublishReadyToRun=true  # Publish the project to the bin directory
       - echo "Packaging the build artifacts..."
-      - sam package --template template.yaml --s3-bucket s3-awsdevassociate-codepipeline-ss --force-upload --debug --region us-east-1 --s3-prefix lambda
+      - sam package --template template.yaml --s3-bucket s3-awsdevassociate-codepipeline-ss --force-upload --region us-east-1 --s3-prefix lambda
   
 artifacts:
    files:
-     - lambda-function.zip         # Compiled .NET Lambda artifact
      - packaged-template.yml       # Packaged template for deployment
